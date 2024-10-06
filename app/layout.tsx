@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider"
+import CourseSidebar from "@/components/sidebar"
 
 import "./globals.css";
 
@@ -36,7 +37,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          {children}
+          <div className="flex h-screen">
+          <CourseSidebar />
+          <main className="flex-1 overflow-y-auto p-8">
+            {children}
+          </main>
+          </div>
         </ThemeProvider>
       </body>
     </html>
