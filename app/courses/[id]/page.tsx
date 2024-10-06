@@ -8,7 +8,7 @@ export default function Course() {
     const [course, setCourse] = useState(null);
 
     useEffect(() => {
-        generateCourseOutline().then((data) => {
+        generateCourseOutline("Detailed history of Uruguay with all important events").then((data) => {
         setCourse(data);
         });
     }, []);
