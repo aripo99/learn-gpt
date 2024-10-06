@@ -3,13 +3,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import generateCourseOutline from "@/lib/actions/generate-course-outline"
 import { useEffect, useState } from "react"
+import { useSearchParams } from 'next/navigation'
 
 export default function Course() {
     const [course, setCourse] = useState(null);
+    const searchParams = useSearchParams()
+    const prompt = searchParams.get('prompt')
 
     useEffect(() => {
-        generateCourseOutline("Detailed history of Uruguay with all important events").then((data) => {
-        setCourse(data);
+        if (!prompt) {
+            return;
+        }
+        generateCourseOutline(prompt).then((data) => {
+            setCourse(data);
         });
     }, []);
 
@@ -27,10 +33,10 @@ export default function Course() {
                 {course.sections.map((section) => (
                 <Card key={section.id} className="transition-shadow hover:shadow-md">
                     <CardHeader>
-                    <CardTitle className="text-xl">{section.title}</CardTitle>
+                        <CardTitle className="text-xl">{section.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                    <p className="text-muted-foreground">{section.content}</p>
+                        <p className="text-muted-foreground">{section.content}</p>
                     </CardContent>
                 </Card>
                 ))}

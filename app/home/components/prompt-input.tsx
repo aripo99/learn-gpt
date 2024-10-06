@@ -4,12 +4,17 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {  Send } from "lucide-react"
+import { useRouter } from 'next/navigation'
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Component() {
-  const [input, setInput] = useState('')
+  const router = useRouter();
+  const [prompt, setPrompt] = useState('');
 
   const handleGeneratePrompt = () => {
-    console.log('Generating prompt:', input)
+    const uuid = uuidv4();
+    const encodedPrompt = encodeURIComponent(prompt);
+    router.push(`/courses/${uuid}?prompt=${encodedPrompt}`);
   }
 
   return (
@@ -17,8 +22,8 @@ export default function Component() {
       <div className="flex items-center space-x-2 justify-center min-h-screen">
         <div className="relative flex-grow">
           <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
             placeholder={"What do you want to learn about?"}
             className="pr-10"
           />
