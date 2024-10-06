@@ -27,13 +27,13 @@ export default function CourseSidebar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/courses">
-                <Button variant="ghost" size="icon" className="relative" aria-label="Course history">
+                <Button variant="ghost" size="icon" className="relative" aria-label="Your courses">
                   <History className="h-6 w-6" />
                 </Button>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">
-              <p>Course history</p>
+              <p>Your Courses</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
