@@ -22,7 +22,7 @@ const courses = [
   }
 ]
 
-export default function Component() {
+export default function Courses() {
   return (
     <div className="container mx-auto py-12 px-12">
       <h1 className="text-3xl font-bold mb-8 text-center">Your Courses</h1>
