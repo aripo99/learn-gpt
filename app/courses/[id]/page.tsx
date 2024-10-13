@@ -2,23 +2,29 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import generateCourseOutline from "@/lib/actions/generate-course-outline"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from 'next/navigation'
 import Link from "next/link"
+import ReactMarkdown from 'react-markdown';
 
 export default function Course() {
     const [course, setCourse] = useState(null);
     const searchParams = useSearchParams()
     const prompt = searchParams.get('prompt')
 
+    const effectRan = useRef(false);
+
     useEffect(() => {
-        if (!prompt) {
+        if (!prompt || course) {
             return;
         }
-        generateCourseOutline(prompt).then((data) => {
-            setCourse(data);
-        });
-    }, []);
+        if (effectRan.current === false) {
+            generateCourseOutline(prompt).then((data) => {
+                setCourse(data);
+            });
+            effectRan.current = true;
+        }
+    });
 
     if (!course) {
         return <p>Loading...</p>;
@@ -38,7 +44,7 @@ export default function Course() {
                                 <CardTitle className="text-xl">{section.title}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-muted-foreground">{section.content}</p>
+                                <ReactMarkdown className="text-muted-foreground">{section.content}</ReactMarkdown>
                             </CardContent>
                         </Card>
                     </Link>
