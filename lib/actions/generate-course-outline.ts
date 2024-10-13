@@ -3,6 +3,7 @@
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
+// import getSupabaseServerClient from "@/lib/supabase/server-component-client";
 
 const openai = new OpenAI();
 
