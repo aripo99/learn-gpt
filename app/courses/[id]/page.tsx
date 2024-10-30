@@ -6,11 +6,13 @@ import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from 'next/navigation'
 import Link from "next/link"
 import ReactMarkdown from 'react-markdown';
+import { useParams } from 'next/navigation';
 
 export default function Course() {
     const [course, setCourse] = useState(null);
-    const searchParams = useSearchParams()
-    const prompt = searchParams.get('prompt')
+    const { id } = useParams() as { id: string };
+    const searchParams = useSearchParams();
+    const prompt = searchParams.get('prompt');
 
     const effectRan = useRef(false);
 
@@ -19,7 +21,7 @@ export default function Course() {
             return;
         }
         if (effectRan.current === false) {
-            generateCourseOutline(prompt).then((data) => {
+            generateCourseOutline(id, prompt).then((data) => {
                 setCourse(data);
             });
             effectRan.current = true;
