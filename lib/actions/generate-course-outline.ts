@@ -42,8 +42,6 @@ export default async function getOrGenerateCourseOutline(id: string, prompt?: st
   .single();
 
   if (existingCourse) {
-      console.log("Existing course found:", existingCourse); 
-      // Transform course_sections to sections
       const transformedCourse = {
           name: existingCourse.name,
           description: existingCourse.description,
@@ -99,7 +97,6 @@ export default async function getOrGenerateCourseOutline(id: string, prompt?: st
         throw new Error("Failed to insert course into database");
     }
 
-    // Insert sections into the CourseSections table
     const sectionsData = course.sections.map(section => ({
         course_id: insertedCourse.id,
         title: section.title,

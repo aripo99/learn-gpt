@@ -4,12 +4,14 @@ import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from 'next/navigation'
 import generateCourseSection from "@/lib/actions/generate-course-section"
 import ReactMarkdown from 'react-markdown';
+import { useParams } from 'next/navigation';
 
 export default function CourseSection() {
     const searchParams = useSearchParams()
     const name = searchParams.get('name')
     const section_title = searchParams.get('section_title')
     const section_content = searchParams.get('section_content')
+    const section_id = useParams().section_id as string;
     const [description, setDescription] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -23,7 +25,7 @@ export default function CourseSection() {
   
       if (effectRan.current === false) {
         setLoading(true);
-        generateCourseSection(section_title, section_content)
+        generateCourseSection(section_id, section_title, section_content)
           .then((data) => {
             setDescription(data.sectionDescription);
           })
