@@ -12,12 +12,12 @@ export default function Course() {
     const [course, setCourse] = useState(null);
     const { id } = useParams() as { id: string };
     const searchParams = useSearchParams();
-    const prompt = searchParams.get('prompt');
+    const prompt = searchParams.get('prompt') || undefined;
 
     const effectRan = useRef(false);
 
     useEffect(() => {
-        if (!prompt || course) {
+        if (course) {
             return;
         }
         if (effectRan.current === false) {

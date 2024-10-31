@@ -20,7 +20,7 @@ const CourseOutlineEvent = z.object({
 });
 
 
-export default async function getOrGenerateCourseOutline(id: string, prompt: string) {
+export default async function getOrGenerateCourseOutline(id: string, prompt?: string) {
   const client = await createClient();
 
   // Query to check if course already exists with sections
@@ -40,7 +40,7 @@ export default async function getOrGenerateCourseOutline(id: string, prompt: str
   `)
   .eq('id', id)
   .single();
-    
+
   if (existingCourse) {
       console.log("Existing course found:", existingCourse); 
       // Transform course_sections to sections
@@ -54,6 +54,10 @@ export default async function getOrGenerateCourseOutline(id: string, prompt: str
           })),
       }; 
       return transformedCourse;
+  }
+
+  if (!prompt) {
+      throw new Error("Prompt is required to generate course outline");
   }
 
   const completion = await openai.beta.chat.completions.parse({
