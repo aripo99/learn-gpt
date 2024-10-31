@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import generateCourseSection from "@/lib/actions/generate-course-section"
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'next/navigation';
+import { Button } from "@/components/ui/button";
 
 export default function CourseSection() {
     const searchParams = useSearchParams()
@@ -53,8 +54,13 @@ export default function CourseSection() {
         <article className="prose prose-invert max-w-none">
             <ReactMarkdown>{description}</ReactMarkdown>
         </article>
+        <div className="flex mt-4 justify-end gap-2">
+            <Button disabled={true}> Back </Button>
+            <Button disabled={true}> Next </Button>
+        </div>
         </div>
         )}
+
       </div>
     )
   }
