@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import generateCourseOutline from "@/lib/actions/generate-course-outline"
+import getOrGenerateCourseOutline from "@/lib/actions/generate-course-outline"
 import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from 'next/navigation'
 import Link from "next/link"
@@ -21,7 +21,7 @@ export default function Course() {
             return;
         }
         if (effectRan.current === false) {
-            generateCourseOutline(id, prompt).then((data) => {
+            getOrGenerateCourseOutline(id, prompt).then((data) => {
                 setCourse(data);
             });
             effectRan.current = true;

@@ -20,7 +20,42 @@ const CourseOutlineEvent = z.object({
 });
 
 
-export default async function generateCourseOutline(id: string, prompt: string) {
+export default async function getOrGenerateCourseOutline(id: string, prompt: string) {
+  const client = await createClient();
+
+  // Query to check if course already exists with sections
+  const { data: existingCourse } = await client
+  .from('courses')
+  .select(`
+    id,
+    name,
+    description,
+    prompt,
+    created_at,
+    course_sections (
+      id,
+      title,
+      content
+    )
+  `)
+  .eq('id', id)
+  .single();
+    
+  if (existingCourse) {
+      console.log("Existing course found:", existingCourse); 
+      // Transform course_sections to sections
+      const transformedCourse = {
+          name: existingCourse.name,
+          description: existingCourse.description,
+          sections: existingCourse.course_sections.map((section: any) => ({
+              id: section.id,
+              title: section.title,
+              content: section.content,
+          })),
+      }; 
+      return transformedCourse;
+  }
+
   const completion = await openai.beta.chat.completions.parse({
     model: "gpt-4o",
     messages: [
@@ -41,8 +76,6 @@ export default async function generateCourseOutline(id: string, prompt: string) 
     if (!course) {
         throw new Error("Failed to parse course data.");
     }
-
-    const client = await createClient();
 
     // Insert the course into the Courses table
     const { data: insertedCourse, error: courseError } = await client
