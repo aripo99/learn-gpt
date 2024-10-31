@@ -39,14 +39,20 @@ export default function CourseSection() {
     return (
       <div className="mx-auto p-6 shadow-md rounded-lg">
         <h2 className="text-2xl font-bold mb-2 text-gray-500">{name}</h2>
-        <p className="text-md text-gray-100 mb-4">{section_title}</p>
+        <p className="text-md text-gray-100 mb-4">
+            {section_title}
+        </p>
         <div className="border-t py-4">
+        <article className="prose prose-invert max-w-none">
             <ReactMarkdown>{section_content}</ReactMarkdown>
+        </article>
         </div>
         {loading && <p>Loading...</p>}
         {!loading && (
         <div className="border-t pt-4">
-          <ReactMarkdown>{description}</ReactMarkdown>
+        <article className="prose prose-invert max-w-none">
+            <ReactMarkdown>{description}</ReactMarkdown>
+        </article>
         </div>
         )}
       </div>
