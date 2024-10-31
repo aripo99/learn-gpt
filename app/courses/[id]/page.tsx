@@ -46,7 +46,9 @@ export default function Course() {
                                 <CardTitle className="text-xl">{section.title}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <ReactMarkdown className="text-muted-foreground">{section.content}</ReactMarkdown>
+                                <article className="prose prose-invert max-w-none">
+                                    <ReactMarkdown className="text-muted-foreground">{section.content}</ReactMarkdown>
+                                </article>
                             </CardContent>
                         </Card>
                     </Link>
