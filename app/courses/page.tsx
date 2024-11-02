@@ -1,13 +1,16 @@
 import Link from "next/link"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import getCourses from "@/lib/actions/get-courses"
+import { LoadingSpinner } from "@/components/spinner";
 
 export default async function Courses() {
   const courses = await getCourses();
 
   if (!courses) {
-    return <p>Loading...</p>;
-  }
+    return (
+        <LoadingSpinner/>
+    )
+}
 
   return (
     <div className="container mx-auto py-12 px-12">
