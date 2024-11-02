@@ -4,9 +4,11 @@ import { useEffect, useState, useRef } from "react"
 import generateCourseSection from "@/lib/actions/generate-course-section"
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button";
 
 export default function CourseSection() {
+    const router = useRouter();
     const section_id = useParams().section_id as string;
     const course_id = useParams().id as string;
     const [courseName, setCourseName] = useState(null);
@@ -52,12 +54,12 @@ export default function CourseSection() {
             <ReactMarkdown>{description}</ReactMarkdown>
         </article>
         <div className="flex mt-4 justify-end gap-2">
-            <Button disabled={true}> Back </Button>
-            <Button disabled={true}> Next </Button>
+            <Button disabled={Number(section_id) === 0} onClick={() => router.push(`/courses/${course_id}/${Number(section_id) - 1}`)}> Back </Button>
+            <Button onClick={() => router.push(`/courses/${course_id}/${Number(section_id) + 1}`)}> Next </Button>
         </div>
         </div>
         )}
 
       </div>
     )
-  }
+}
