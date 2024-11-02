@@ -12,13 +12,11 @@ const CourseOutlineEvent = z.object({
     description: z.string(),
     sections: z.array(
         z.object({
-        id: z.number(),
         title: z.string(),
         content: z.string(),
         })
     ),
 });
-
 
 export default async function getOrGenerateCourseOutline(id: string, prompt?: string) {
   const client = await createClient();
@@ -71,44 +69,54 @@ export default async function getOrGenerateCourseOutline(id: string, prompt?: st
       },
     ],
     response_format: zodResponseFormat(CourseOutlineEvent, "event")
-    });
+  });
   
-    const course = completion.choices[0].message.parsed;
+  const course = completion.choices[0].message.parsed;
 
-    if (!course) {
-        throw new Error("Failed to parse course data.");
-    }
+  if (!course) {
+      throw new Error("Failed to parse course data.");
+  }
 
-    // Insert the course into the Courses table
-    const { data: insertedCourse, error: courseError } = await client
-        .from('courses')
-        .insert({
-            id: id,
-            name: course.name,
-            description: course.description,
-            prompt,
-            created_at: new Date().toISOString(),
-        })
-        .select('id')
-        .single();
+  const { error: courseError } = await client
+    .from('courses')
+    .insert({
+        id: id,
+        name: course.name,
+        description: course.description,
+        prompt,
+        created_at: new Date().toISOString(),
+    });
 
-    if (courseError) {
-        console.error("Database error:", courseError);
-        throw new Error("Failed to insert course into database");
-    }
+  if (courseError) {
+      console.error("Database error:", courseError);
+      throw new Error("Failed to insert course into database");
+  }
 
-    const sectionsData = course.sections.map(section => ({
-        course_id: insertedCourse.id,
-        title: section.title,
-        content: section.content,
-    }));
+  // Prepare sections data with sequential IDs
+  const sectionsData = course.sections.map((section, index) => ({
+      course_id: id,
+      id: index,
+      title: section.title,
+      content: section.content,
+  }));
 
-    const { error: sectionsError } = await client.from('course_sections').insert(sectionsData);
+  const { error: sectionsError } = await client
+    .from('course_sections')
+    .insert(sectionsData);
 
-    if (sectionsError) {
-        console.error("Database error while inserting sections:", sectionsError);
-        throw new Error("Failed to insert sections into database");
-    }
+  if (sectionsError) {
+      console.error("Database error while inserting sections:", sectionsError);
+      throw new Error("Failed to insert sections into database");
+  }
 
-    return course;
+  // Return the course with sequential IDs added to sections
+  return {
+    name: course.name,
+    description: course.description,
+    sections: course.sections.map((section, index) => ({
+      id: index,
+      title: section.title,
+      content: section.content,
+    })),
+  };
 }
