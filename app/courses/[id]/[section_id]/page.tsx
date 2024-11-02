@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/spinner";
 
 export default function CourseSection() {
     const router = useRouter();
@@ -36,6 +37,12 @@ export default function CourseSection() {
       }
     }, []);
 
+    if (loading) {
+        return (
+            <LoadingSpinner/>
+        )
+    }
+
     return (
       <div className="mx-auto p-6 shadow-md rounded-lg">
         <h2 className="text-2xl font-bold mb-2 text-gray-500">{courseName}</h2>
@@ -47,8 +54,6 @@ export default function CourseSection() {
             <ReactMarkdown>{sectionContent}</ReactMarkdown>
         </article>
         </div>
-        {loading && <p>Loading...</p>}
-        {!loading && (
         <div className="border-t pt-4">
         <article className="prose prose-invert max-w-none">
             <ReactMarkdown>{description}</ReactMarkdown>
@@ -58,8 +63,6 @@ export default function CourseSection() {
             <Button onClick={() => router.push(`/courses/${course_id}/${Number(section_id) + 1}`)}> Next </Button>
         </div>
         </div>
-        )}
-
       </div>
     )
 }

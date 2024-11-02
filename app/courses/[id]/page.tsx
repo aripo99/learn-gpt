@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from "next/link"
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'next/navigation';
+import { LoadingSpinner } from "@/components/spinner";
 
 export default function Course() {
     const [course, setCourse] = useState(null);
@@ -29,7 +30,9 @@ export default function Course() {
     });
 
     if (!course) {
-        return <p>Loading...</p>;
+        return (
+            <LoadingSpinner/>
+        )
     }
 
     return (
